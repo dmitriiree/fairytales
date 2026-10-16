@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>동화 극장 · Сказки</title>
+<meta name="description" content="Корейские сказки-сценки для детей: мультик с голосами, субтитры KO / RU / EN и режим репетиции роли.">
+<meta property="og:title" content="동화 극장 · Сказки для сценки">
+<meta property="og:description" content="Мультик с голосами, субтитры KO / RU / EN и режим репетиции роли.">
+<meta property="og:image" content="https://dmitriiree.github.io/fairytales/img/snow-white.jpg">
+<meta name="color-scheme" content="dark">
+<style>
+  :root { --ink: #1f2a2e; --bg: #0e181c; --panel: #192b32; --line: #2c4650; --muted: #9fb3b9; --text: #fff;
+          --accent: #f2b544; --ru: #c9d6da; --en: #b9d3c4; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--text);
+               font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans KR", sans-serif; }
+  h1, .ko, .play { font-family: "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif; }
+  body { min-height: 100vh; padding: 32px 16px 40px; display: flex; flex-direction: column; align-items: center; }
+  .wrap { width: 100%; max-width: 1080px; }
+  header { text-align: center; margin-bottom: 28px; }
+  h1 { margin: 0; font-size: clamp(34px, 6vw, 60px); letter-spacing: .02em; }
+  .sub { color: var(--accent); font-size: clamp(16px, 2.2vw, 22px); margin-top: 6px; }
+  .sub2 { color: var(--muted); font-size: 15px; margin-top: 4px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
+  .card { display: flex; flex-direction: column; background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+          overflow: hidden; color: inherit; text-decoration: none; box-shadow: 0 10px 34px #0007;
+          transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+  .card:hover, .card:focus-visible { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 16px 40px #000a; outline: none; }
+  .cover { position: relative; aspect-ratio: 16 / 9; background: #000; }
+  .cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cover .play { position: absolute; right: 14px; bottom: 14px; background: var(--accent); color: var(--ink); font-weight: 800;
+                 border-radius: 99px; padding: .45em 1.1em; font-size: 16px; box-shadow: 0 5px 0 #b7822a; }
+  .body { padding: 16px 18px 20px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .ko { font-size: clamp(26px, 3.4vw, 34px); font-weight: 800; }
+  .names { color: var(--ru); font-size: 17px; }
+  .names .en { color: var(--en); }
+  .about { color: var(--ru); font-size: 15px; line-height: 1.45; margin-top: 4px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 10px; }
+  .meta span { background: #22363e; border: 1px solid var(--line); border-radius: 99px; padding: 3px 10px; font-size: 13px; color: var(--muted); }
+  .how { margin-top: 28px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px;
+         color: var(--ru); font-size: 15px; line-height: 1.55; }
+  .how b { color: var(--text); }
+  .how .en { color: var(--en); }
+  @media (max-width: 480px) { body { padding-top: 22px; } .grid { gap: 16px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>동화 극장</h1>
+    <div class="sub">Сказки для сценки · Story theatre</div>
+    <div class="sub2">Корейские сказки для детского спектакля: мультик с голосами и репетиция своей роли</div>
+  </header>
+
+  <main class="grid">
+    <a class="card" href="bremen/">
+      <div class="cover"><img src="img/bremen.jpg" alt="Осёл, пёс, кот и петух на дороге" loading="lazy"><span class="play">▶ 시작</span></div>
+      <div class="body">
+        <div class="ko">브레멘 음악대</div>
+        <div class="names">Бременские музыканты · <span class="en">The Bremen Town Musicians</span></div>
+        <div class="about">Старый осёл, пёс, кот и петух идут в Бремен собирать оркестр — и по дороге прогоняют разбойников.</div>
+        <div class="meta"><span>5 глав</span><span>102 реплики</span><span>~5 мин</span><span>KO · RU · EN</span></div>
+      </div>
+    </a>
+    <a class="card" href="snow-white/">
+      <div class="cover"><img src="img/snow-white.jpg" alt="Белоснежка, принц и три гнома у домика" loading="lazy"><span class="play">▶ 시작</span></div>
+      <div class="body">
+        <div class="ko">백설 공주</div>
+        <div class="names">Белоснежка · <span class="en">Snow White</span></div>
+        <div class="about">Королева, честное волшебное зеркало, три гнома «весом за семерых» и принц, сдавший коня на парковку.</div>
+        <div class="meta"><span>6 глав</span><span>91 реплика</span><span>~5 мин</span><span>KO · RU · EN</span></div>
+      </div>
+    </a>
+  </main>
+
+  <section class="how">
+    <b>Как репетировать.</b> Выберите «🎭 Я играю» и свою роль: реплика сначала звучит как образец, потом мультик ждёт — скажите её сами и нажмите пробел (или кнопку на экране). Скорость 0.7× — чтобы расслышать произношение, R — повторить реплику.
+    <div class="en">Pick “🎭 I play” and a role: hear the line, say it yourself, then press Space or tap.</div>
+  </section>
+</div>
+</body>
+</html>
