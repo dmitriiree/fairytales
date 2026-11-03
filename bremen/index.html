@@ -225,7 +225,7 @@
   </div>
 </div>
 
-<script src="data/story.js?v=10"></script>
+<script src="data/story.js?v=11"></script>
 <script>
 (() => {
   const S = window.STORY;
@@ -256,7 +256,7 @@
     b.onclick = () => jump(idx);
     $('chapters').appendChild(b);
   });
-  const ROLES = ['', 'donkey', 'dog', 'cat', 'rooster', 'chief', 'r1', 'r2', 'n1', 'n2'];
+  const ROLES = ['', 'donkey', 'dog', 'cat', 'rooster', 'chief', 'r1', 'r2', 'n1', 'n2', 'n12'];
   ROLES.forEach(r => { const o = document.createElement('option'); o.value = r; $('me').appendChild(o); });
 
   // Interface language follows the translation checkboxes: EN -> English, only RU -> Russian, none -> Korean.
@@ -560,7 +560,7 @@
     runAnim(it.anim, speakers, it); runFx(it.fx, speakers);
     const me = $('me').value;
     if (it.fx === 'animal' && !it.parts) speakers.forEach(id => actors[id] && burst(actors[id], it.text.split(/[ !…~]/)[0] + '!'));
-    const mine = me && (speakers.includes(me) || it.role === me);
+    const mine = me && (speakers.includes(me) || it.role === me || (S.groups[me] || []).includes(it.role));
     const heardIt = new Promise(res => {
       audio.src = it.audio + IMG_V; audio.playbackRate = speed; audio.currentTime = 0;
       audio.onplaying = () => {
