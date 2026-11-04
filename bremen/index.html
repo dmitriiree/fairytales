@@ -217,8 +217,9 @@
       <option value="0.7">0.7×</option><option value="0.85">0.85×</option><option value="1" selected>1×</option><option value="1.15">1.15×</option>
     </select>
     <select id="me" title="Rehearsal mode: the chosen role is not voiced">
-      
+
     </select>
+    <label title="Drill mode: only the chosen role's lines are played, other lines, chapters and stage directions are skipped"><input type="checkbox" id="drill"><span id="drillTxt"></span></label>
     <label title="Russian translation"><input type="checkbox" id="ruToggle" checked> RU</label>
     <label title="English subtitles"><input type="checkbox" id="enToggle"> EN</label>
     <div class="chapters" id="chapters"></div>
@@ -262,13 +263,13 @@
   // Interface language follows the translation checkboxes: EN -> English, only RU -> Russian, none -> Korean.
   const UI = {
     en: { tagline: 'The Bremen Town Musicians · a play for kids', go: '▶ 시작 · Start', press: 'Press “Start”.',
-          again: '🔁 Again', iplay: '🎭 I play', yourturn: '🎤 Your turn — say it, then press Space', yourturnTouch: '🎤 Your turn — say it, then tap here',
+          again: '🔁 Again', iplay: '🎭 I play', mineOnly: 'My lines only', yourturn: '🎤 Your turn — say it, then press Space', yourturnTouch: '🎤 Your turn — say it, then tap here',
           chapter: n => `${n}장 · Chapter ${n}`, home: '← 동화 · All stories' },
     ru: { tagline: 'Бременские музыканты · сказка для сценки', go: '▶ 시작 · Начать', press: 'Нажмите «Начать».',
-          again: '🔁 Ещё раз', iplay: '🎭 Я играю', yourturn: '🎤 Твоя очередь — скажи и нажми пробел', yourturnTouch: '🎤 Твоя очередь — скажи и нажми сюда',
+          again: '🔁 Ещё раз', iplay: '🎭 Я играю', mineOnly: 'Мои реплики', yourturn: '🎤 Твоя очередь — скажи и нажми пробел', yourturnTouch: '🎤 Твоя очередь — скажи и нажми сюда',
           chapter: n => `${n}장 · Глава ${n}`, home: '← 동화 · Все сказки' },
     ko: { tagline: '어린이 연극', go: '▶ 시작', press: '“시작”을 누르세요.',
-          again: '🔁 다시', iplay: '🎭 내 역할', yourturn: '🎤 내 차례 — 말한 다음 스페이스를 누르세요', yourturnTouch: '🎤 내 차례 — 말한 다음 여기를 누르세요',
+          again: '🔁 다시', iplay: '🎭 내 역할', mineOnly: '내 대사만', yourturn: '🎤 내 차례 — 말한 다음 스페이스를 누르세요', yourturnTouch: '🎤 내 차례 — 말한 다음 여기를 누르세요',
           chapter: n => `${n}장`, home: '← 동화 모음' },
   };
   let lang = 'en', lastLine = null, lastChapter = null;
@@ -281,6 +282,7 @@
     $('tagline').textContent = T.tagline; $('home').textContent = T.home; $('go').textContent = T.go; $('again').innerHTML = T.again.replace(/^(\S+) (.*)$/, '$1<span class="lbl"> $2</span>');
     $('yourturn').textContent = matchMedia('(pointer: coarse)').matches ? T.yourturnTouch : T.yourturn;
     [...$('me').options].forEach(o => { o.textContent = `${T.iplay}: ${o.value ? speakerName(o.value) : '—'}`; });
+    $('drillTxt').textContent = T.mineOnly;
     [...$('chapters').children].forEach((b, k) => { const c = items[chapterIdx[k]]; b.title = lang === 'ko' ? c.text : c[lang]; });
     if (lastLine) $('who').textContent = speakerName(lastLine.role); else $('ko').textContent = T.press;
     if (lastChapter) $('card').querySelector('.num').textContent = T.chapter(lastChapter.num);
@@ -517,6 +519,9 @@
 
   // ---------- sequencing ----------
   function speakersOf(role) { return S.groups[role] || [role]; }
+  function drillOn() { return $('drill').checked && !!$('me').value; }
+  function isMine(it) { const me = $('me').value;
+    return !!me && (speakersOf(it.role).includes(me) || it.role === me || (S.groups[me] || []).includes(it.role)); }
   function wait(ms, t) { return new Promise(res => { timer = setTimeout(() => res(t === token), ms); }); }
 
   async function step() {
@@ -524,6 +529,11 @@
     while (playing && t === token && idx < items.length) {
       const it = items[idx];
       $('action').classList.remove('show');
+      if (drillOn() && !isMine(it)) {          // drill: fly over chapters, scenes and other roles' lines
+        if (it.kind === 'scene') setScene(it.scene, it.pose);
+        if (it.pose) Object.entries(it.pose).forEach(([id, p]) => setPose(id, p));
+        idx++; continue;
+      }
       if (it.kind === 'chapter') {
         const c = $('card'); lastChapter = it; c.querySelector('.num').textContent = UI[lang].chapter(it.num);
         c.querySelector('.ko').textContent = it.text; c.querySelector('.ru').textContent = it.ru;
@@ -560,7 +570,7 @@
     runAnim(it.anim, speakers, it); runFx(it.fx, speakers);
     const me = $('me').value;
     if (it.fx === 'animal' && !it.parts) speakers.forEach(id => actors[id] && burst(actors[id], it.text.split(/[ !…~]/)[0] + '!'));
-    const mine = me && (speakers.includes(me) || it.role === me || (S.groups[me] || []).includes(it.role));
+    const mine = isMine(it);
     const heardIt = new Promise(res => {
       audio.src = it.audio + IMG_V; audio.playbackRate = speed; audio.currentTime = 0;
       audio.onplaying = () => {
